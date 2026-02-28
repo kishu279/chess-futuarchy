@@ -22,13 +22,15 @@ pub struct DepositInstruction<'info> {
     #[account(
         mut,
         seeds = [b"vault", market.seed.to_le_bytes().as_ref()],
-        bump = market.config_bump,
+        bump = market.vault_bump,
     )]
     pub vault: SystemAccount<'info>,
 
     #[account(
-        mut,
-        seeds = [b"user-bet", depositor.key().as_ref(), market.key().as_ref()],
+        init_if_needed,
+        payer = depositor,
+        space = UserBet::DISCRIMINATOR.len() + UserBet::INIT_SPACE,
+        seeds = [b"user_bet", depositor.key().as_ref(), market.key().as_ref()],
         bump
     )]
     pub user_bet: Account<'info, UserBet>,
@@ -60,13 +62,13 @@ pub struct DepositInstruction<'info> {
 impl<'info> DepositInstruction<'info> {
     pub fn process(
         &mut self,
-        amount_in_sol: u64, // as sol
+        amount: u64, // in lampoits
         is_player_x: bool,
         bump: DepositInstructionBumps,
     ) -> Result<()> {
-        let amount = amount_in_sol
-            .checked_mul(1_000_000_000.0 as u64)
-            .ok_or(Error::Overflow)?;
+        // let amount = amount_in_sol
+        //     .checked_mul(1_000_000_000.0 as u64)
+        //     .ok_or(Error::Overflow)?;
 
         let market = &mut self.market;
         let clock = Clock::get()?;
@@ -134,7 +136,7 @@ impl<'info> DepositInstruction<'info> {
         }
 
         let cpi_ctx = CpiContext::new(
-            self.token_program.to_account_info(),
+            self.system_program.to_account_info(),
             Transfer {
                 from: self.depositor.to_account_info(),
                 to: self.vault.to_account_info(),

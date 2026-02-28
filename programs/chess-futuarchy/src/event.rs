@@ -19,9 +19,9 @@ pub struct UserBetUpdated {
 #[event]
 pub struct MarketResolved {
     pub market: Pubkey,
-    pub winning_outcome: u8,
     pub total_bets_x: u64,
     pub total_bets_y: u64,
+    pub winning_outcome: bool,
 }
 
 #[event]
@@ -30,7 +30,7 @@ pub struct FundsDistributed {
     pub treasury_fee: u64,
     pub winner_share: u64,
     pub loser_share: u64,
-    pub winning_outcome: u8,
+    pub winning_outcome: bool,
 }
 
 #[event]

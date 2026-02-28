@@ -1,19 +1,14 @@
-use anchor_lang::prelude::*;
-use anchor_spl::{
-    associated_token::AssociatedToken,
-    token::{transfer, Mint, Token, TokenAccount, Transfer},
-};
+use anchor_lang::{prelude::*, system_program};
+use anchor_spl::{associated_token::AssociatedToken, token::Token};
 
 use crate::{errors::Error, state::Config};
 
 #[derive(Accounts)]
-#[instruction(seed: u8)]
+#[instruction(seed: u64)]
 pub struct MakeMarket<'info> {
     #[account(mut)]
     pub signer: Signer<'info>,
 
-    // mint for collateral
-    // pub collateral_mint: Account<'info, Mint>,
     #[account(
         init,
         payer = signer,
@@ -30,19 +25,6 @@ pub struct MakeMarket<'info> {
     )]
     pub vault: SystemAccount<'info>,
 
-    // #[account(
-    //     seeds = [b"collater-vault", seed.to_le_bytes().as_ref()],
-    //     bump
-    // )]
-    // pub market_vault_authority: Account<'info, TokenAccount>,
-
-    // #[account(
-    //     init,
-    //     payer = signer,
-    //     associated_token::mint = collateral_mint,
-    //     associated_token::authority = market_vault_authority,
-    // )]
-    // pub market_vault: Account<'info, TokenAccount>,
     pub system_program: Program<'info, System>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub token_program: Program<'info, Token>,
@@ -51,9 +33,8 @@ pub struct MakeMarket<'info> {
 impl<'info> MakeMarket<'info> {
     pub fn initialize(
         &mut self,
-        seed: u8,
+        seed: u64,
         fee: u16,
-        bump: MakeMarketBumps,
         max_bet: u64,
         min_bet: u64,
         treasury: Pubkey,
@@ -62,6 +43,7 @@ impl<'info> MakeMarket<'info> {
         start_time: i64,
         end_time: i64,
         resolution_time: i64,
+        bump: &MakeMarketBumps,
     ) -> Result<()> {
         let clock = Clock::get()?;
 
@@ -79,22 +61,21 @@ impl<'info> MakeMarket<'info> {
 
         let rent_exempt = Rent::get()?.minimum_balance(self.vault.to_account_info().data_len());
 
-        // cpi to vault
-        let cpi_accounts = Transfer {
-            from: self.signer.to_account_info(),
-            to: self.vault.to_account_info(),
-            authority: self.signer.to_account_info(),
-        };
-        let cpi_ctx = CpiContext::new(self.token_program.to_account_info(), cpi_accounts);
-
-        transfer(cpi_ctx, rent_exempt)?;
-
         let expected_vault_key = Pubkey::create_program_address(
             &[b"vault", seed.to_le_bytes().as_ref(), &[bump.vault]],
             &crate::id(),
         )
         .map_err(|_| Error::InvalidSeeds)?;
         require_keys_eq!(expected_vault_key, self.vault.key(), Error::InvalidSeeds);
+
+        // cpi to vault
+        let cpi_accounts = system_program::Transfer {
+            from: self.signer.to_account_info(),
+            to: self.vault.to_account_info(),
+        };
+        let cpi_ctx = CpiContext::new(self.system_program.to_account_info(), cpi_accounts);
+
+        system_program::transfer(cpi_ctx, rent_exempt)?;
 
         self.market.set_inner(Config {
             seed,

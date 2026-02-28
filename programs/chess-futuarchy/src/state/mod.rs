@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 #[account]
 #[derive(InitSpace)]
 pub struct Config {
-    pub seed: u8,
+    pub seed: u64,
 
     // market authority
     pub authority: Pubkey,

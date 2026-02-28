@@ -15,7 +15,7 @@ pub mod chess_futuarchy {
 
     pub fn initialize(
         ctx: Context<MakeMarket>,
-        seed: u8,
+        seed: u64,
         fee: u16,
         max_bet: u64,
         min_bet: u64,
@@ -29,7 +29,6 @@ pub mod chess_futuarchy {
         ctx.accounts.initialize(
             seed,
             fee,
-            ctx.bumps,
             max_bet,
             min_bet,
             treasury,
@@ -38,12 +37,23 @@ pub mod chess_futuarchy {
             start_time,
             end_time,
             resolution_time,
+            &ctx.bumps,
         )?;
         Ok(())
     }
 
     pub fn deposit(ctx: Context<DepositInstruction>, amount: u64, is_player_x: bool) -> Result<()> {
         ctx.accounts.process(amount, is_player_x, ctx.bumps)?;
+        Ok(())
+    }
+
+    pub fn resolve(ctx: Context<ResolveInstruction>, is_player_x_won: bool) -> Result<()> {
+        ctx.accounts.resolve(is_player_x_won)?;
+        Ok(())
+    }
+
+    pub fn claim(ctx: Context<ClaimMarket>) -> Result<()> {
+        ctx.accounts.claim_market()?;
         Ok(())
     }
 }
