@@ -1,0 +1,45 @@
+
+action "chess_futuarchy_funds_distributed" "svm::deploy_subgraph" {
+    program_id = action.deploy_chess_futuarchy.program_id
+    program_idl = action.deploy_chess_futuarchy.program_idl
+    block_height = 0 // action.deploy_chess_futuarchy.block_height
+    event {
+        name = "FundsDistributed"
+    }
+}
+
+action "chess_futuarchy_market_claimed" "svm::deploy_subgraph" {
+    program_id = action.deploy_chess_futuarchy.program_id
+    program_idl = action.deploy_chess_futuarchy.program_idl
+    block_height = 0 // action.deploy_chess_futuarchy.block_height
+    event {
+        name = "MarketClaimed"
+    }
+}
+
+action "chess_futuarchy_market_resolved" "svm::deploy_subgraph" {
+    program_id = action.deploy_chess_futuarchy.program_id
+    program_idl = action.deploy_chess_futuarchy.program_idl
+    block_height = 0 // action.deploy_chess_futuarchy.block_height
+    event {
+        name = "MarketResolved"
+    }
+}
+
+action "chess_futuarchy_user_bet_placed" "svm::deploy_subgraph" {
+    program_id = action.deploy_chess_futuarchy.program_id
+    program_idl = action.deploy_chess_futuarchy.program_idl
+    block_height = 0 // action.deploy_chess_futuarchy.block_height
+    event {
+        name = "UserBetPlaced"
+    }
+}
+
+action "chess_futuarchy_user_bet_updated" "svm::deploy_subgraph" {
+    program_id = action.deploy_chess_futuarchy.program_id
+    program_idl = action.deploy_chess_futuarchy.program_idl
+    block_height = 0 // action.deploy_chess_futuarchy.block_height
+    event {
+        name = "UserBetUpdated"
+    }
+}

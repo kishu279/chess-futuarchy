@@ -1,0 +1,17 @@
+❯ anchor deploy
+Deploying cluster: https://api.devnet.solana.com
+Upgrade authority: /home/kishu/.config/solana/id.json
+Deploying program "chess_futuarchy"...
+Program path: /home/kishu/Desktop/kishu-codes/chess-futuarchy/target/deploy/chess_futuarchy.so...
+Program Id: EhP3gZ1bk3aiA2gRtCYgf61qS7qfVCBEzXMiodrA751h
+
+Signature: 54AxiMxzf8nFhCWdsAB1WdkChLFezxiT2cDVai998BAmnVeB6vPQ7sBeBi9MZYBQ81ZrnVL9QTjUammqN5ubyfuC
+
+Waiting for program EhP3gZ1bk3aiA2gRtCYgf61qS7qfVCBEzXMiodrA751h to be confirmed...
+Program confirmed on-chain
+Idl data length: 1681 bytes
+Step 0/1681 
+Step 600/1681 
+Step 1200/1681 
+Idl account created: 7EzKjzQHMW5ACyZnyqEeF7Vi8wzSAfQehEYz48fgToJj
+Deploy success
