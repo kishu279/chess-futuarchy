@@ -56,9 +56,4 @@ pub mod chess_futuarchy {
         ctx.accounts.claim_market()?;
         Ok(())
     }
-
-    pub fn sweep_vault(ctx: Context<SweepVault>) -> Result<()> {
-        ctx.accounts.sweep()?;
-        Ok(())
-    }
 }

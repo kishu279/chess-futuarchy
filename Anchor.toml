@@ -15,10 +15,10 @@ chess_futuarchy = "EhP3gZ1bk3aiA2gRtCYgf61qS7qfVCBEzXMiodrA751h"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 \"tests/chess-futuarchy.ts\""
 test-devnet = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 \"tests/devnet.ts\""
-gen-keypairs = "yarn ts-node scripts/generate-keypairs.ts"
+gen-keypairs = "npx ts-node scripts/generate-keypairs.ts"

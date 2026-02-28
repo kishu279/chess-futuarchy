@@ -9,6 +9,3 @@ pub use resolve::*;
 
 pub mod claim;
 pub use claim::*;
-
-pub mod sweep;
-pub use sweep::*;
